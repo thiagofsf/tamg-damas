@@ -159,15 +159,15 @@ class Jogo:
                     if(self.tabuleirodes[i][j] == self.casa_selecionada):
                         if (self.tabuleiro[i][j] == self.jogadores[0]):
                             #verifica casas diagonais abaixo
-                            if(self.tabuleiro[i+1][j-1]=='-'):
+                            if((j-1)>0 and self.tabuleiro[i+1][j-1]=='-'):
                                 possibilidades.append(self.tabuleirodes[i+1][j-1])
-                            if(self.tabuleiro[i+1][j+1]=='-'):
+                            if((j+1)<8 and self.tabuleiro[i+1][j+1]=='-'):
                                 possibilidades.append(self.tabuleirodes[i+1][j+1])
                         elif(self.tabuleiro[i][j] == self.jogadores[1]):
                             # verifica casas diagonais acima
-                            if (self.tabuleiro[i - 1][j - 1] == '-'):
+                            if ((j-1)>0 and self.tabuleiro[i - 1][j - 1] == '-'):
                                 possibilidades.append(self.tabuleirodes[i - 1][j - 1])
-                            if (self.tabuleiro[i - 1][j + 1] == '-'):
+                            if ((j+1)<8 and self.tabuleiro[i - 1][j + 1] == '-'):
                                 possibilidades.append(self.tabuleirodes[i - 1][j + 1])
             # a lista de casas possiveis
             return possibilidades
