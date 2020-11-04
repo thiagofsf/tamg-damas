@@ -7,6 +7,7 @@ from PPlay.gameimage import *
 from PPlay.sprite import *
 from TelaTitulo import *
 from TelaSobre import *
+from Jogo import *
 from Cena import *
 
 #definir janela
@@ -26,11 +27,8 @@ telatitulo = TelaTitulo(cena, window, mouse)
 #nova tela de Sobre
 telasobre = TelaSobre(cena, window, mouse)
 
-#Procedimento de jogo
-gamebg = GameImage('sprites/bg-board.png')
-def game():
-    gamebg.draw()
-    return None
+#novo jogo
+telajogo = Jogo(cena, window, mouse)
 
 ####### GAME LOOP ########
 while True:
@@ -39,5 +37,5 @@ while True:
     elif cena.getCena() == 'about':
         telasobre.sobre()
     elif cena.getCena() == 'game':
-        game()
+        telajogo.jogo()
     window.update()
