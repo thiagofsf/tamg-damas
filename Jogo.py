@@ -25,7 +25,7 @@ class Jogo:
         self.liberada = Sprite('sprites/sprite-casa-liberada.png')
 
         #auxiliares para posicionamento de desenho
-        self.xini = 186.5
+        self.xini = 186
         self.yini = 0
         self.tamcasa = 60
 
