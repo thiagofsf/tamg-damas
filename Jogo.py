@@ -147,6 +147,7 @@ class Jogo:
                 if ((casa.x < pos[0]) and ((casa.x + self.tamcasa) > pos[0]) and (casa.y < pos[1]) and (
                         (casa.y + self.tamcasa) > pos[1])):
                     self.casa_selecionada = casa
+        pygame.time.wait(200)
         return None
 
     def verificarjogadas(self):
@@ -173,12 +174,76 @@ class Jogo:
             return possibilidades
         return None
 
+    def turnojogador(self):
+        #definir peça
+        peca = ''
+        # Se houver, Recuperar casa selecionada na matriz de jogo
+        if(self.casa_selecionada):
+            for i in range(8):
+                for j in range(8):
+                    if (self.tabuleirodes[i][j].x == self.selecionada.x) and (
+                            self.tabuleirodes[i][j].y == self.selecionada.y):
+                        peca = (i, j)
+        #verificar se ha clique no mouse
+        if(self.mouse.is_button_pressed(1)):
+            print("entrou no loop")
+            #verifica se há célula selecionada
+            if(self.casa_selecionada):
+                print("achou casa selecionada")
+                #se a peça na casa selecionada pertence ao jogador
+                if (peca) and (self.tabuleiro[peca[0]][peca[1]] == 'o'):
+                    print("a peça da seleção tem a peça do jogador")
+                    #verifica se há jogadas possiveis
+                    if(self.lista_possibilidades):
+                        #onde foi o clique:
+                        jogadai = ''
+                        jogadaj = ''
+                        pos = self.mouse.get_position()
+                        for i in range(8):
+                            for j in range(8):
+                                if ((self.tabuleirodes[i][j].x < pos[0]) and (
+                                        (self.tabuleirodes[i][j].x + self.tamcasa) > pos[0]) and (
+                                        self.tabuleirodes[i][j].y < pos[1]) and (
+                                        (self.tabuleirodes[i][j].y + self.tamcasa) > pos[1])):
+                                    jogadai = i
+                                    jogadaj = j
+                        #verifica se o clique foi em celula possivel
+                        for elemento in self.lista_possibilidades:
+                            print("chegou aqui ", "peca ",peca[0], peca[1], "jogada ", jogadai, jogadaj)
+                            print("compara x:", elemento.x, self.tabuleirodes[jogadai][jogadaj].x)
+                            print("compara y:", elemento.y, self.tabuleirodes[jogadai][jogadaj].y)
+                            if ((elemento.x == self.tabuleirodes[jogadai][jogadaj].x)and(elemento.y == self.tabuleirodes[jogadai][jogadaj].y)):
+                                #jogada valida, prosseguir troca
+                                print("valida-prosseguir troca")
+                                temp = self.tabuleiro[jogadai][jogadaj]
+                                self.tabuleiro[jogadai][jogadaj] = self.tabuleiro[peca[0]][peca[1]]
+                                self.tabuleiro[peca[0]][peca[1]] = temp
+                                print("jogou")
+                                #self.turno = 0
+                                self.casa_selecionada = None
+                                self.lista_possibilidades = None
+                            else:
+                                self.selecionar()
+                    #se não há, selecionar
+                    self.selecionar()
+                else:
+                    self.selecionar()
+            else:
+                self.selecionar()
+
+        return None
+
+    def turnoia(self):
+        return None
+
     def jogo(self):
         #desenhar tabuleiro
         self.bggame.draw()
         self.desenhatabuleiro()
         self.desenhajogo()
-        #Verificar Clique no mouse e fazer seleção
-        if (self.mouse.is_button_pressed(1)):
-            self.selecionar()
+        if (self.turno == 1):
+            self.turnojogador()
+        else:
+            self.turnoia()
+
 
