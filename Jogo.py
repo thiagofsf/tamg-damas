@@ -335,6 +335,25 @@ class Jogo:
     def turnoia(self):
         return None
 
+    def verificavitoria(self):
+        temX = 0
+        temO = 0
+        for i in range (8):
+            for j in range (8):
+                if (self.tabuleiro[i][j] == 'x') or (self.tabuleiro[i][j] == 'X'):
+                    temX = 1
+                    break
+        for i in range (8):
+            for j in range (8):
+                if(self.tabuleiro[i][j] == 'o') or (self.tabuleiro[i][j] == 'O'):
+                    temO = 1
+                    break
+        if(temX == 0):
+            self.cena = "win"
+        elif(temO == 0):
+            self.cena = "lose"
+        return None
+
     def jogo(self):
         #desenhar tabuleiro
         self.bggame.draw()
