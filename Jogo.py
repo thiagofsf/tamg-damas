@@ -33,6 +33,7 @@ class Jogo:
         self.jogadores = ('x', 'o')
         self.casa_selecionada = None
         self.lista_possibilidades = None
+        self.lista_obrigatorias = None
         self.pulando = 0
         
         #criar tabuleiro
@@ -80,7 +81,7 @@ class Jogo:
             self.contlinha = self.contlinha + 1
 
         #tabuleiro de jogo
-        self.tabuleiro = [['x', '-', 'x', '-', 'x', '-', 'x', '-'],
+        self.tabuleiro2 = [['x', '-', 'x', '-', 'x', '-', 'x', '-'],
                           ['-', 'x', '-', 'x', '-', 'x', '-', 'x'],
                           ['x', '-', 'x', '-', 'x', '-', 'x', '-'],
                           ['-', '-', '-', '-', '-', '-', '-', '-'],
@@ -89,9 +90,16 @@ class Jogo:
                           ['o', '-', 'o', '-', 'o', '-', 'o', '-'],
                           ['-', 'o', '-', 'o', '-', 'o', '-', 'o']]
 
+        self.tabuleiro = [['x', '-', 'x', '-', 'x', '-', 'x', '-'],
+                          ['-', 'x', '-', 'x', '-', 'x', '-', 'x'],
+                          ['x', '-', 'x', '-', 'x', '-', 'x', '-'],
+                          ['-', '-', '-', '-', '-', '-', '-', '-'],
+                          ['-', '-', 'x', '-', '-', '-', '-', '-'],
+                          ['-', 'o', '-', 'o', '-', 'o', '-', 'o'],
+                          ['o', '-', 'o', '-', 'o', '-', 'o', '-'],
+                          ['-', 'o', '-', 'o', '-', 'o', '-', 'o']]
+
     def desenhatabuleiro(self):
-        if(self.casa_selecionada):
-            self.lista_possibilidades = self.verificarjogadas()
         for linha in self.tabuleirodes:
             for casa in linha:
                 casa.draw()
@@ -142,11 +150,17 @@ class Jogo:
     #função que define célula selecionada
     def selecionar(self):
         pos = self.mouse.get_position()
-        for linha in self.tabuleirodes:
-            for casa in linha:
-                if ((casa.x < pos[0]) and ((casa.x + self.tamcasa) > pos[0]) and (casa.y < pos[1]) and (
-                        (casa.y + self.tamcasa) > pos[1])):
-                    self.casa_selecionada = casa
+        if(self.lista_obrigatorias == None):
+            for linha in self.tabuleirodes:
+                for casa in linha:
+                    if ((casa.x < pos[0]) and ((casa.x + self.tamcasa) > pos[0]) and (casa.y < pos[1]) and (
+                            (casa.y + self.tamcasa) > pos[1])):
+                        self.casa_selecionada = casa
+        else:
+            for elemento in self.lista_obrigatorias:
+                if ((elemento.x < pos[0]) and ((elemento.x + self.tamcasa) > pos[0]) and (elemento.y < pos[1]) and (
+                        (elemento.y + self.tamcasa) > pos[1])):
+                    self.casa_selecionada = elemento
         pygame.time.wait(200)
         return None
 
@@ -154,27 +168,99 @@ class Jogo:
         #lista de marcadas
         if(self.casa_selecionada):
             possibilidades = []
-            #localizar posição da celula celecionada e verificar de acordo com o tipo de peça se há jogadas disponiveis
-            for i in range (8):
-                for j in range (8):
-                    if(self.tabuleirodes[i][j] == self.casa_selecionada):
-                        if (self.tabuleiro[i][j] == self.jogadores[0]):
-                            #verifica casas diagonais abaixo
-                            if((j-1)>=0 and self.tabuleiro[i+1][j-1]=='-'):
-                                possibilidades.append(self.tabuleirodes[i+1][j-1])
-                            if((j+1)<8 and self.tabuleiro[i+1][j+1]=='-'):
-                                possibilidades.append(self.tabuleirodes[i+1][j+1])
-                        elif(self.tabuleiro[i][j] == self.jogadores[1]):
-                            # verifica casas diagonais acima
-                            if ((j-1)>=0 and self.tabuleiro[i - 1][j - 1] == '-'):
-                                possibilidades.append(self.tabuleirodes[i - 1][j - 1])
-                            if ((j+1)<8 and self.tabuleiro[i - 1][j + 1] == '-'):
-                                possibilidades.append(self.tabuleirodes[i - 1][j + 1])
+            if(self.lista_obrigatorias):
+                print("verificando jogadas -> tem obrigatoria")
+                for i in range(8):
+                    for j in range(8):
+                        if (self.tabuleirodes[i][j] == self.casa_selecionada):
+                            if(self.tabuleiro[i][j] == 'x'):
+                                # se a casa diagonal existe e tem peça oponente:
+                                if ((j - 1) >= 0 and self.tabuleiro[i + 1][j - 1] == 'o'):
+                                    # verifica se existe casa vazia na mesma diagonal
+                                    if ((j - 2) >= 0 and self.tabuleiro[i + 2][j - 2] == '-'):
+                                        possibilidades.append(self.tabuleirodes[i+2][j-2])
+                                        self.pulo = 1
+                                # se a outra diagonal existe e tem peça oponente:
+                                if ((j + 1) < 8 and self.tabuleiro[i + 1][j + 1] == 'o'):
+                                    # verifica se existe casa vazia na mesma diagonal
+                                    if ((j + 2) < 8 and self.tabuleiro[i + 2][j + 2] == '-'):
+                                        possibilidades.append(self.tabuleirodes[i][j])
+                                        self.pulo = 1
+                            if(self.tabuleiro[i][j] == 'o'):
+                                # se a casa diagonal existe e tem peça oponente:
+                                if ((j - 1) >= 0 and self.tabuleiro[i - 1][j - 1] == 'x'):
+                                    print("casa existe e tem peça oponente")
+                                    # verifica se existe casa vazia na mesma diagonal
+                                    if ((j - 2) >= 0 and self.tabuleiro[i - 2][j - 2] == '-'):
+                                        possibilidades.append(self.tabuleirodes[i-2][j-2])
+                                        self.pulo = 1
+                                # se a outra diagonal existe e tem peça oponente:
+                                if ((j + 1) < 8 and self.tabuleiro[i - 1][j + 1] == 'x'):
+                                    # verifica se existe casa vazia na mesma diagonal
+                                    if ((j + 2) < 8 and self.tabuleiro[i - 2][j + 2] == '-'):
+                                        possibilidades.append(self.tabuleirodes[i-2][j+2])
+                                        self.pulo = 1
+            else:
+                #localizar posição da celula celecionada e verificar de acordo com o tipo de peça se há jogadas disponiveis
+                for i in range (8):
+                    for j in range (8):
+                        if(self.tabuleirodes[i][j] == self.casa_selecionada):
+                            if (self.tabuleiro[i][j] == 'x'):
+                                #verifica casas diagonais abaixo
+                                if((j-1)>=0 and self.tabuleiro[i+1][j-1]=='-'):
+                                    possibilidades.append(self.tabuleirodes[i+1][j-1])
+                                if((j+1)<8 and self.tabuleiro[i+1][j+1]=='-'):
+                                    possibilidades.append(self.tabuleirodes[i+1][j+1])
+                            elif(self.tabuleiro[i][j] == self.jogadores[1]):
+                                # verifica casas diagonais acima
+                                if ((j-1)>=0 and self.tabuleiro[i - 1][j - 1] == '-'):
+                                    possibilidades.append(self.tabuleirodes[i - 1][j - 1])
+                                if ((j+1)<8 and self.tabuleiro[i - 1][j + 1] == '-'):
+                                    possibilidades.append(self.tabuleirodes[i - 1][j + 1])
             # a lista de casas possiveis
             return possibilidades
         return None
 
+    def verificarObrigatorias(self):
+        #lista de marcadas
+        Obrigatorias = []
+        if(self.turno == 0):
+            for i in range (8):
+                for j in range (8):
+                    if(self.tabuleiro[i][j] == 'x'):
+                        # se a casa diagonal existe e tem peça oponente:
+                        if ((j - 1) >= 0 and self.tabuleiro[i + 1][j - 1] == 'o'):
+                            # verifica se existe casa vazia na mesma diagonal
+                            if ((j - 2) >= 0 and self.tabuleiro[i + 2][j - 2] == '-'):
+                                Obrigatorias.append(self.tabuleirodes[i][j])
+                        #se a outra diagonal existe e tem peça oponente:
+                        if ((j + 1) < 8 and self.tabuleiro[i + 1][j + 1] == 'o'):
+                            #verifica se existe casa vazia na mesma diagonal
+                            if ((j + 2) < 8 and self.tabuleiro[i + 2][j + 2] == '-'):
+                                Obrigatorias.append(self.tabuleirodes[i][j])
+        if(self.turno == 1):
+            for i in range (8):
+                for j in range (8):
+                    if(self.tabuleiro[i][j] == 'o'):
+                        # se a casa diagonal existe e tem peça oponente:
+                        if ((j - 1) >= 0 and self.tabuleiro[i - 1][j - 1] == 'x'):
+                            # verifica se existe casa vazia na mesma diagonal
+                            if ((j - 2) >= 0 and self.tabuleiro[i - 2][j - 2] == '-'):
+                                Obrigatorias.append(self.tabuleirodes[i][j])
+                        #se a outra diagonal existe e tem peça oponente:
+                        if ((j + 1) < 8 and self.tabuleiro[i - 1][j + 1] == 'x'):
+                            #verifica se existe casa vazia na mesma diagonal
+                            if ((j + 2) < 8 and self.tabuleiro[i - 2][j + 2] == '-'):
+                                Obrigatorias.append(self.tabuleirodes[i][j])
+        if (Obrigatorias != []):
+            return Obrigatorias
+        return None
+
     def turnojogador(self):
+        #verificar se há jogadas obrigatorias
+        self.lista_obrigatorias = self.verificarObrigatorias()
+        self.lista_possibilidades = self.verificarjogadas()
+        #print("obrigatorias: ", self.lista_obrigatorias)
         #definir peça
         peca = ''
         # Se houver, Recuperar casa selecionada na matriz de jogo
@@ -218,6 +304,9 @@ class Jogo:
                                 temp = self.tabuleiro[jogadai][jogadaj]
                                 self.tabuleiro[jogadai][jogadaj] = self.tabuleiro[peca[0]][peca[1]]
                                 self.tabuleiro[peca[0]][peca[1]] = temp
+                                if self.pulo == 1:
+                                    self.comer(peca[0], peca[1], jogadai, jogadaj)
+                                    self.pulo == 0
                                 print("jogou")
                                 #self.turno = 0
                                 self.casa_selecionada = None
@@ -231,6 +320,16 @@ class Jogo:
             else:
                 self.selecionar()
 
+        return None
+    def comer(self, coordpecai, coordpecaj, coordjogi, coordjogj):
+        if (coordpecai > coordjogi) and (coordpecaj > coordjogj):
+            self.tabuleiro[coordpecai-1][coordpecaj-1] = '-'
+        elif (coordpecai > coordjogi) and (coordpecaj < coordjogj):
+            self.tabuleiro[coordpecai - 1][coordpecaj + 1] = '-'
+        elif (coordpecai < coordjogi) and (coordpecaj > coordjogj):
+            self.tabuleiro[coordpecai + 1][coordpecaj - 1] = '-'
+        elif (coordpecai < coordjogi) and (coordpecaj < coordjogj):
+            self.tabuleiro[coordpecai + 1][coordpecaj + 1] = '-'
         return None
 
     def turnoia(self):
