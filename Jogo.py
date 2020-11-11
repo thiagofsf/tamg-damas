@@ -93,9 +93,9 @@ class Jogo:
         self.tabuleiro = [['x', '-', 'x', '-', 'x', '-', 'x', '-'],
                           ['-', 'x', '-', 'x', '-', 'x', '-', 'x'],
                           ['x', '-', 'x', '-', 'x', '-', 'x', '-'],
-                          ['-', '-', '-', '-', '-', '-', '-', '-'],
-                          ['-', '-', 'x', '-', '-', '-', '-', '-'],
-                          ['-', 'o', '-', 'o', '-', 'o', '-', 'o'],
+                          ['-', '-', '-', '-', '-', 'o', '-', '-'],
+                          ['-', '-', '-', '-', 'x', '-', '-', '-'],
+                          ['-', 'o', '-', '-', '-', 'o', '-', 'o'],
                           ['o', '-', 'o', '-', 'o', '-', 'o', '-'],
                           ['-', 'o', '-', 'o', '-', 'o', '-', 'o']]
 
@@ -174,32 +174,63 @@ class Jogo:
                     for j in range(8):
                         if (self.tabuleirodes[i][j] == self.casa_selecionada):
                             if(self.tabuleiro[i][j] == 'x'):
-                                # se a casa diagonal existe e tem peça oponente:
-                                if ((j - 1) >= 0 and self.tabuleiro[i + 1][j - 1] == 'o'):
-                                    # verifica se existe casa vazia na mesma diagonal
-                                    if ((j - 2) >= 0 and self.tabuleiro[i + 2][j - 2] == '-'):
-                                        possibilidades.append(self.tabuleirodes[i+2][j-2])
-                                        self.pulo = 1
-                                # se a outra diagonal existe e tem peça oponente:
-                                if ((j + 1) < 8 and self.tabuleiro[i + 1][j + 1] == 'o'):
-                                    # verifica se existe casa vazia na mesma diagonal
-                                    if ((j + 2) < 8 and self.tabuleiro[i + 2][j + 2] == '-'):
-                                        possibilidades.append(self.tabuleirodes[i][j])
-                                        self.pulo = 1
+                                # se casas diagonais abaixo:
+                                if (i + 1 < 8 and i + 2 < 8):
+                                    # se a casa diagonal existe e tem peça oponente:
+                                    if ((j - 1) >= 0 and (self.tabuleiro[i + 1][j - 1] == 'o' or self.tabuleiro[i + 1][j - 1] == 'O')):
+                                        # verifica se existe casa vazia na mesma diagonal
+                                        if ((j - 2) >= 0 and self.tabuleiro[i + 2][j - 2] == '-'):
+                                            possibilidades.append(self.tabuleirodes[i+2][j-2])
+                                            self.pulo = 1
+                                    # se a outra diagonal existe e tem peça oponente:
+                                    if ((j + 1) < 8 and (self.tabuleiro[i + 1][j + 1] == 'o' or self.tabuleiro[i + 1][j + 1] == 'O')):
+                                        # verifica se existe casa vazia na mesma diagonal
+                                        if ((j + 2) < 8 and self.tabuleiro[i + 2][j + 2] == '-'):
+                                            possibilidades.append(self.tabuleirodes[i][j])
+                                            self.pulo = 1
+                                #verificar casas diagonais acima
+                                if(i-1 >=0 and i-2>=0):
+                                    # se a casa diagonal existe e tem peça oponente:
+                                    if ((j - 1) >= 0 and (self.tabuleiro[i - 1][j - 1] == 'o' or self.tabuleiro[i - 1][j - 1] == 'O')):
+                                        # verifica se existe casa vazia na mesma diagonal
+                                        if ((j - 2) >= 0 and self.tabuleiro[i - 2][j - 2] == '-'):
+                                            possibilidades.append(self.tabuleirodes[i - 2][j - 2])
+                                            self.pulo = 1
+                                    # se a outra diagonal existe e tem peça oponente:
+                                    if ((j + 1) < 8 and (self.tabuleiro[i - 1][j + 1] == 'o' or self.tabuleiro[i - 1][j + 1] == 'O')):
+                                        # verifica se existe casa vazia na mesma diagonal
+                                        if ((j + 2) < 8 and self.tabuleiro[i - 2][j + 2] == '-'):
+                                            possibilidades.append(self.tabuleirodes[i - 2][j + 2])
+                                            self.pulo = 1
                             if(self.tabuleiro[i][j] == 'o'):
-                                # se a casa diagonal existe e tem peça oponente:
-                                if ((j - 1) >= 0 and self.tabuleiro[i - 1][j - 1] == 'x'):
-                                    print("casa existe e tem peça oponente")
-                                    # verifica se existe casa vazia na mesma diagonal
-                                    if ((j - 2) >= 0 and self.tabuleiro[i - 2][j - 2] == '-'):
-                                        possibilidades.append(self.tabuleirodes[i-2][j-2])
-                                        self.pulo = 1
-                                # se a outra diagonal existe e tem peça oponente:
-                                if ((j + 1) < 8 and self.tabuleiro[i - 1][j + 1] == 'x'):
-                                    # verifica se existe casa vazia na mesma diagonal
-                                    if ((j + 2) < 8 and self.tabuleiro[i - 2][j + 2] == '-'):
-                                        possibilidades.append(self.tabuleirodes[i-2][j+2])
-                                        self.pulo = 1
+                                # se casas diagonais abaixo:
+                                if (i + 1 < 8 and i + 2 < 8):
+                                    # se a casa diagonal existe e tem peça oponente:
+                                    if ((j - 1) >= 0 and (self.tabuleiro[i + 1][j - 1] == 'x' or self.tabuleiro[i + 1][j - 1] == 'X')):
+                                        # verifica se existe casa vazia na mesma diagonal
+                                        if ((j - 2) >= 0 and self.tabuleiro[i + 2][j - 2] == '-'):
+                                            possibilidades.append(self.tabuleirodes[i + 2][j - 2])
+                                            self.pulo = 1
+                                    # se a outra diagonal existe e tem peça oponente:
+                                    if ((j + 1) < 8 and (self.tabuleiro[i + 1][j + 1] == 'x' or self.tabuleiro[i + 1][j + 1] == 'X')):
+                                        # verifica se existe casa vazia na mesma diagonal
+                                        if ((j + 2) < 8 and self.tabuleiro[i + 2][j + 2] == '-'):
+                                            possibilidades.append(self.tabuleirodes[i][j])
+                                            self.pulo = 1
+                                # verificar casas diagonais acima
+                                if (i - 1 >= 0 and i - 2 >= 0):
+                                    # se a casa diagonal existe e tem peça oponente:
+                                    if ((j - 1) >= 0 and (self.tabuleiro[i - 1][j - 1] == 'x' or self.tabuleiro[i - 1][j - 1] == 'X')):
+                                        # verifica se existe casa vazia na mesma diagonal
+                                        if ((j - 2) >= 0 and self.tabuleiro[i - 2][j - 2] == '-'):
+                                            possibilidades.append(self.tabuleirodes[i - 2][j - 2])
+                                            self.pulo = 1
+                                    # se a outra diagonal existe e tem peça oponente:
+                                    if ((j + 1) < 8 and (self.tabuleiro[i - 1][j + 1] == 'x' or self.tabuleiro[i - 1][j + 1] == 'X')):
+                                        # verifica se existe casa vazia na mesma diagonal
+                                        if ((j + 2) < 8 and self.tabuleiro[i - 2][j + 2] == '-'):
+                                            possibilidades.append(self.tabuleirodes[i - 2][j + 2])
+                                            self.pulo = 1
             else:
                 #localizar posição da celula celecionada e verificar de acordo com o tipo de peça se há jogadas disponiveis
                 for i in range (8):
@@ -228,30 +259,58 @@ class Jogo:
             for i in range (8):
                 for j in range (8):
                     if(self.tabuleiro[i][j] == 'x'):
-                        # se a casa diagonal existe e tem peça oponente:
-                        if ((j - 1) >= 0 and self.tabuleiro[i + 1][j - 1] == 'o'):
-                            # verifica se existe casa vazia na mesma diagonal
-                            if ((j - 2) >= 0 and self.tabuleiro[i + 2][j - 2] == '-'):
-                                Obrigatorias.append(self.tabuleirodes[i][j])
-                        #se a outra diagonal existe e tem peça oponente:
-                        if ((j + 1) < 8 and self.tabuleiro[i + 1][j + 1] == 'o'):
-                            #verifica se existe casa vazia na mesma diagonal
-                            if ((j + 2) < 8 and self.tabuleiro[i + 2][j + 2] == '-'):
-                                Obrigatorias.append(self.tabuleirodes[i][j])
+                        # se casas diagonais abaixo:
+                        if(i+1<8 and i+2<8):
+                            # se a diagonal existe e tem peça oponente:
+                            if ((j - 1) >= 0 and (self.tabuleiro[i + 1][j - 1] == 'o' or self.tabuleiro[i + 1][j - 1] == 'O')):
+                                # verifica se existe casa vazia na mesma diagonal
+                                if ((j - 2) >= 0 and self.tabuleiro[i + 2][j - 2] == '-'):
+                                    Obrigatorias.append(self.tabuleirodes[i][j])
+                            #se a outra diagonal existe e tem peça oponente:
+                            if ((j + 1) < 8 and (self.tabuleiro[i + 1][j + 1] == 'o' or self.tabuleiro[i + 1][j + 1] == 'O')):
+                                #verifica se existe casa vazia na mesma diagonal
+                                if ((j + 2) < 8 and self.tabuleiro[i + 2][j + 2] == '-'):
+                                    Obrigatorias.append(self.tabuleirodes[i][j])
+                        # se casas diagonais acima:
+                        if(i-1>=0 and i-2>=0):
+                            # se a diagonal existe e tem peça oponente:
+                            if ((j - 1) >= 0 and (self.tabuleiro[i - 1][j - 1] == 'o' or self.tabuleiro[i - 1][j - 1] == 'O')):
+                                # verifica se existe casa vazia na mesma diagonal
+                                if ((j - 2) >= 0 and self.tabuleiro[i - 2][j - 2] == '-'):
+                                    Obrigatorias.append(self.tabuleirodes[i][j])
+                            # se a outra diagonal existe e tem peça oponente:
+                            if ((j + 1) < 8 and (self.tabuleiro[i - 1][j + 1] == 'o' or self.tabuleiro[i - 1][j + 1] == 'O')):
+                                # verifica se existe casa vazia na mesma diagonal
+                                if ((j + 2) < 8 and self.tabuleiro[i - 2][j + 2] == '-'):
+                                    Obrigatorias.append(self.tabuleirodes[i][j])
         if(self.turno == 1):
             for i in range (8):
                 for j in range (8):
                     if(self.tabuleiro[i][j] == 'o'):
-                        # se a casa diagonal existe e tem peça oponente:
-                        if ((j - 1) >= 0 and self.tabuleiro[i - 1][j - 1] == 'x'):
-                            # verifica se existe casa vazia na mesma diagonal
-                            if ((j - 2) >= 0 and self.tabuleiro[i - 2][j - 2] == '-'):
-                                Obrigatorias.append(self.tabuleirodes[i][j])
-                        #se a outra diagonal existe e tem peça oponente:
-                        if ((j + 1) < 8 and self.tabuleiro[i - 1][j + 1] == 'x'):
-                            #verifica se existe casa vazia na mesma diagonal
-                            if ((j + 2) < 8 and self.tabuleiro[i - 2][j + 2] == '-'):
-                                Obrigatorias.append(self.tabuleirodes[i][j])
+                        if (i + 1 < 8 and i + 2 < 8):
+                            # se a casa diagonal existe e tem peça oponente:
+                            if ((j - 1) >= 0 and (
+                                    self.tabuleiro[i + 1][j - 1] == 'x' or self.tabuleiro[i + 1][j - 1] == 'X')):
+                                # verifica se existe casa vazia na mesma diagonal
+                                if ((j - 2) >= 0 and self.tabuleiro[i + 2][j - 2] == '-'):
+                                    Obrigatorias.append(self.tabuleirodes[i][j])
+                            # se a outra diagonal existe e tem peça oponente:
+                            if ((j + 1) < 8 and (
+                                    self.tabuleiro[i + 1][j + 1] == 'x' or self.tabuleiro[i + 1][j + 1] == 'X')):
+                                # verifica se existe casa vazia na mesma diagonal
+                                if ((j + 2) < 8 and self.tabuleiro[i + 2][j + 2] == '-'):
+                                    Obrigatorias.append(self.tabuleirodes[i][j])
+                        if (i < 1 >= 8 and i - 2 >=0):
+                            # se a outra casa diagonal existe e tem peça oponente:
+                            if ((j - 1) >= 0 and (self.tabuleiro[i - 1][j - 1] == 'x' or self.tabuleiro[i - 1][j - 1] == 'X')):
+                                # verifica se existe casa vazia na mesma diagonal
+                                if ((j - 2) >= 0 and self.tabuleiro[i - 2][j - 2] == '-'):
+                                    Obrigatorias.append(self.tabuleirodes[i][j])
+                            #se a outra diagonal existe e tem peça oponente:
+                            if ((j + 1) < 8 and (self.tabuleiro[i - 1][j + 1] == 'x' or self.tabuleiro[i - 1][j + 1] == 'X')):
+                                #verifica se existe casa vazia na mesma diagonal
+                                if ((j + 2) < 8 and self.tabuleiro[i - 2][j + 2] == '-'):
+                                    Obrigatorias.append(self.tabuleirodes[i][j])
         if (Obrigatorias != []):
             return Obrigatorias
         return None
@@ -306,11 +365,12 @@ class Jogo:
                                 self.tabuleiro[peca[0]][peca[1]] = temp
                                 if self.pulo == 1:
                                     self.comer(peca[0], peca[1], jogadai, jogadaj)
-                                    self.pulo == 0
+                                    self.pulo = 0
                                 print("jogou")
                                 #self.turno = 0
                                 self.casa_selecionada = None
                                 self.lista_possibilidades = None
+                                self.lista_obrigatorias = None
                             else:
                                 self.selecionar()
                     #se não há, selecionar
@@ -363,5 +423,6 @@ class Jogo:
             self.turnojogador()
         else:
             self.turnoia()
+        self.verificavitoria()
 
 
