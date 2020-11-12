@@ -97,7 +97,7 @@ class Jogo:
                           ['-', '-', '-', '-', 'x', '-', '-', '-'],
                           ['-', 'o', '-', '-', '-', 'o', '-', 'o'],
                           ['o', '-', 'o', '-', 'o', '-', 'o', '-'],
-                          ['-', 'o', '-', 'o', '-', 'o', '-', 'o']]
+                          ['-', 'o', '-', 'x', '-', 'o', '-', 'o']]
 
     def desenhatabuleiro(self):
         for linha in self.tabuleirodes:
@@ -121,6 +121,10 @@ class Jogo:
         self.peaob.y = self.yini
         self.peaop.x = self.xini
         self.peaop.y = self.yini
+        self.damab.x = self.xini
+        self.damab.y = self.yini
+        self.damap.x = self.xini
+        self.damap.y = self.yini
         #variavel auxiliar de controle de cor da casa
         self.contcor = 1
         self.contlinha = 1
@@ -134,18 +138,38 @@ class Jogo:
             for casa in linha:
                 if(casa == 'x'):
                     self.peaop.draw()
+                elif(casa == 'X'):
+                    self.damap.draw()
                 elif(casa == 'o'):
                     self.peaob.draw()
+                elif(casa == 'O'):
+                    self.damab.draw()
                 self.peaob.x = self.peaob.x + self.tamcasa
                 self.peaop.x = self.peaop.x + self.tamcasa
+                self.damab.x = self.damab.x + self.tamcasa
+                self.damap.x = self.damap.x + self.tamcasa
             #redefinir o X para Xini
             self.peaob.x = self.xini
             self.peaop.x = self.xini
+            self.damab.x = self.xini
+            self.damap.x = self.xini
             #atualizar o y para prox linha
             self.peaob.y = self.peaob.y + self.tamcasa
             self.peaop.y = self.peaop.y + self.tamcasa
+            self.damab.y = self.damab.y + self.tamcasa
+            self.damap.y = self.damap.y + self.tamcasa
             #atualizar linha
             self.contlinha = self.contlinha + 1
+
+    #verifica dama
+    def verificaDama(self):
+        for i in range(8):
+            if(self.tabuleiro[0][i] == 'o'):
+                self.tabuleiro[0][i] = 'O'
+        for i in range(8):
+            if(self.tabuleiro[7][i] == 'x'):
+                self.tabuleiro[7][i] = 'X'
+        return None
 
     #função que define célula selecionada
     def selecionar(self):
@@ -423,6 +447,7 @@ class Jogo:
             self.turnojogador()
         else:
             self.turnoia()
+        self.verificaDama()
         self.verificavitoria()
 
 
