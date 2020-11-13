@@ -90,14 +90,14 @@ class Jogo:
                           ['o', '-', 'o', '-', 'o', '-', 'o', '-'],
                           ['-', 'o', '-', 'o', '-', 'o', '-', 'o']]
 
-        self.tabuleiro = [['x', '-', 'x', '-', 'x', '-', 'x', '-'],
-                          ['-', 'x', '-', 'x', '-', 'x', '-', 'x'],
-                          ['x', '-', 'x', '-', 'x', '-', 'x', '-'],
-                          ['-', '-', '-', '-', '-', 'o', '-', '-'],
+        self.tabuleiro = [['x', '-', 'x', '-', 'o', '-', 'x', '-'],
+                          ['-', 'x', '-', 'x', '-', '-', '-', 'x'],
+                          ['x', '-', 'x', '-', '-', '-', 'x', '-'],
+                          ['-', '-', '-', '-', '-', '-', '-', '-'],
                           ['-', '-', '-', '-', 'x', '-', '-', '-'],
                           ['-', 'o', '-', '-', '-', 'o', '-', 'o'],
                           ['o', '-', 'o', '-', 'o', '-', 'o', '-'],
-                          ['-', 'o', '-', 'x', '-', 'o', '-', 'o']]
+                          ['-', 'o', '-', 'o', '-', 'o', '-', 'o']]
 
     def desenhatabuleiro(self):
         for linha in self.tabuleirodes:
@@ -193,7 +193,6 @@ class Jogo:
         if(self.casa_selecionada):
             possibilidades = []
             if(self.lista_obrigatorias):
-                print("verificando jogadas -> tem obrigatoria")
                 for i in range(8):
                     for j in range(8):
                         if (self.tabuleirodes[i][j] == self.casa_selecionada):
@@ -307,6 +306,48 @@ class Jogo:
                                 # verifica se existe casa vazia na mesma diagonal
                                 if ((j + 2) < 8 and self.tabuleiro[i - 2][j + 2] == '-'):
                                     Obrigatorias.append(self.tabuleirodes[i][j])
+                    #se tem dama com jogada obrigatoria
+                    if(self.tabuleiro[i][j] == 'X'):
+                        tempi = i
+                        tempj = j
+                        while(tempi>=0 and tempj>=0):
+                            if(tempi-1>=0 and tempj-1>=0 and tempi-2>=0 and tempj-2>=0):
+                                if(self.tabuleiro[tempi-1][tempj-1] == 'o' or self.tabuleiro[tempi-1][tempj-1] == 'O'):
+                                    if(self.tabuleiro[tempi-2][tempj-2] == '-'):
+                                        Obrigatorias.append(self.tabuleirodes[tempi][tempj])
+                                        break
+                            tempi = tempi - 1
+                            tempj = tempj - 1
+                        tempi = i
+                        tempj = j
+                        while (tempi >= 0 and tempj < 8):
+                            if ((tempi - 1 >= 0) and (tempj + 1 < 8) and (tempi - 2 >= 0) and (tempj + 2 < 8)):
+                                if (self.tabuleiro[tempi - 1][tempj + 1] == 'o' or self.tabuleiro[tempi - 1][tempj + 1] == 'O'):
+                                    if (self.tabuleiro[tempi - 2][tempj + 2] == '-'):
+                                        Obrigatorias.append(self.tabuleirodes[tempi][tempj])
+                                        break
+                            tempi = tempi - 1
+                            tempj = tempj + 1
+                        tempi = i
+                        tempj = j
+                        while (tempi < 8 and tempj >= 0):
+                            if ((tempi + 1 < 8) and (tempj - 1 >= 0) and (tempi + 2 < 8) and (tempj - 2 >= 0)):
+                                if (self.tabuleiro[tempi + 1][tempj - 1] == 'o' or self.tabuleiro[tempi + 1][tempj - 1] == 'O'):
+                                    if (self.tabuleiro[tempi + 2][tempj - 2] == '-'):
+                                        Obrigatorias.append(self.tabuleirodes[tempi][tempj])
+                                        break
+                            tempi = tempi + 1
+                            tempj = tempj - 1
+                        tempi = i
+                        tempj = j
+                        while (tempi < 8 and tempj < 8):
+                            if ((tempi + 1 < 8) and (tempj + 1 < 8) and (tempi + 2 < 8) and (tempj + 2 < 8)):
+                                if (self.tabuleiro[tempi + 1][tempj + 1] == 'o' or self.tabuleiro[tempi + 1][tempj + 1] == 'O'):
+                                    if (self.tabuleiro[tempi + 2][tempj + 2] == '-'):
+                                        Obrigatorias.append(self.tabuleirodes[tempi][tempj])
+                                        break
+                            tempi = tempi + 1
+                            tempj = tempj + 1
         if(self.turno == 1):
             for i in range (8):
                 for j in range (8):
@@ -335,10 +376,56 @@ class Jogo:
                                 #verifica se existe casa vazia na mesma diagonal
                                 if ((j + 2) < 8 and self.tabuleiro[i - 2][j + 2] == '-'):
                                     Obrigatorias.append(self.tabuleirodes[i][j])
+                    #se tem dama com jogada obrigatoria
+                    if (self.tabuleiro[i][j] == 'O'):
+                        tempi = i
+                        tempj = j
+                        while (tempi >= 0 and tempj >= 0):
+                            if (tempi - 1 >= 0 and tempj - 1 >= 0 and tempi - 2 >= 0 and tempj - 2 >= 0):
+                                if (self.tabuleiro[tempi - 1][tempj - 1] == 'x' or self.tabuleiro[tempi - 1][tempj - 1] == 'X'):
+                                    if (self.tabuleiro[tempi - 2][tempj - 2] == '-'):
+                                        Obrigatorias.append(self.tabuleirodes[i][j])
+                                        break
+                            tempi = tempi - 1
+                            tempj = tempj - 1
+                        tempi = i
+                        tempj = j
+                        while (tempi >= 0 and tempj < 8):
+                            if ((tempi - 1 >= 0) and (tempj + 1 < 8) and (tempi - 2 >= 0) and (tempj + 2 < 8)):
+                                if (self.tabuleiro[tempi - 1][tempj + 1] == 'x' or self.tabuleiro[tempi - 1][tempj + 1] == 'X'):
+                                    if (self.tabuleiro[tempi - 2][tempj + 2] == '-'):
+                                        Obrigatorias.append(self.tabuleirodes[i][j])
+                                        break
+                            tempi = tempi - 1
+                            tempj = tempj + 1
+                        tempi = i
+                        tempj = j
+                        while (tempi < 8 and tempj >= 0):
+                            if ((tempi + 1 < 8) and (tempj - 1 >= 0) and (tempi + 2 < 8) and (tempj - 2 >= 0)):
+                                if (self.tabuleiro[tempi + 1][tempj - 1] == 'x' or self.tabuleiro[tempi + 1][tempj - 1] == 'X'):
+                                    if (self.tabuleiro[tempi + 2][tempj - 2] == '-'):
+                                        Obrigatorias.append(self.tabuleirodes[i][j])
+                                        break
+                            tempi = tempi + 1
+                            tempj = tempj - 1
+                        tempi = i
+                        tempj = j
+                        while (tempi < 8 and tempj < 8):
+                            if ((tempi + 1 < 8) and (tempj + 1 < 8) and (tempi + 2 < 8) and (tempj + 2 < 8)):
+                                if (self.tabuleiro[tempi + 1][tempj + 1] == 'x' or self.tabuleiro[tempi + 1][tempj + 1] == 'X'):
+                                    if (self.tabuleiro[tempi + 2][tempj + 2] == '-'):
+                                        Obrigatorias.append(self.tabuleirodes[i][j])
+                                        break
+                            tempi = tempi + 1
+                            tempj = tempj + 1
+
         if (Obrigatorias != []):
             return Obrigatorias
         return None
 
+        if(listadiagonais!=[]):
+            return listadiagonais
+        return none
     def turnojogador(self):
         #verificar se há jogadas obrigatorias
         self.lista_obrigatorias = self.verificarObrigatorias()
