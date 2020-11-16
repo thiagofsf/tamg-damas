@@ -35,7 +35,7 @@ class Jogo:
         self.lista_possibilidades = None
         self.lista_obrigatorias = None
         self.pecapulo = None
-        self.pulando = 0
+        self.pulo = 0
         
         #criar tabuleiro
         self.tabuleirodes = []
@@ -95,7 +95,7 @@ class Jogo:
                           ['-', 'x', '-', 'x', '-', '-', '-', 'x'],
                           ['x', '-', 'x', '-', '-', '-', 'x', '-'],
                           ['-', '-', '-', '-', '-', '-', '-', '-'],
-                          ['-', '-', '-', '-', 'x', '-', '-', '-'],
+                          ['-', '-', '-', '-', '-', '-', '-', '-'],
                           ['-', 'o', '-', '-', '-', 'o', '-', 'o'],
                           ['o', '-', 'o', '-', 'o', '-', 'o', '-'],
                           ['-', 'o', '-', 'o', '-', 'o', '-', 'o']]
@@ -226,7 +226,89 @@ class Jogo:
                                         if ((j + 2) < 8 and self.tabuleiro[i - 2][j + 2] == '-'):
                                             possibilidades.append(self.tabuleirodes[i - 2][j + 2])
                                             self.pulo = 1
-                            if(self.tabuleiro[i][j] == 'o'):
+                            #se houver obrigatoria e Dama
+                            elif (self.tabuleiro[i][j] == 'X'):
+                                tempi = i
+                                tempj = j
+                                continuarappend = 0
+                                while (tempi >= 0 and tempj >= 0):
+                                    if (continuarappend == 0 and tempi - 1 >= 0 and tempj - 1 >= 0 and tempi - 2 >= 0 and tempj - 2 >= 0):
+                                        if (self.tabuleiro[tempi - 1][tempj - 1] == 'o' or self.tabuleiro[tempi - 1][tempj - 1] == 'O'):
+                                            if (self.tabuleiro[tempi - 2][tempj - 2] == '-'):
+                                                possibilidades.append(self.tabuleirodes[tempi - 2][tempj - 2])
+                                                tempi = tempi - 2
+                                                tempj = tempj - 2
+                                                continuarappend = 1
+                                                self.pulo = 1
+                                            elif (self.tabuleiro[tempi - 2][tempj - 2] != '-'):
+                                                break
+                                    elif (continuarappend == 1 and self.tabuleiro[tempi][tempj] == '-'):
+                                        possibilidades.append(self.tabuleirodes[tempi][tempj])
+                                    elif (continuarappend == 1 and self.tabuleiro[tempi][tempj] != '-'):
+                                        break
+                                    tempi = tempi - 1
+                                    tempj = tempj - 1
+                                tempi = i
+                                tempj = j
+                                continuarappend = 0
+                                while (tempi >= 0 and tempj < 8):
+                                    if (continuarappend == 0 and (tempi - 1 >= 0) and (tempj + 1 < 8) and (tempi - 2 >= 0) and (tempj + 2 < 8)):
+                                        if (self.tabuleiro[tempi - 1][tempj + 1] == 'o' or self.tabuleiro[tempi - 1][tempj + 1] == 'O'):
+                                            if (self.tabuleiro[tempi - 2][tempj + 2] == '-'):
+                                                possibilidades.append(self.tabuleirodes[tempi - 2][tempj + 2])
+                                                tempi = tempi - 2
+                                                tempj = tempj + 2
+                                                continuarappend = 1
+                                                self.pulo = 1
+                                            elif (self.tabuleiro[tempi - 2][tempj - 2] != '-'):
+                                                break
+                                    elif (continuarappend == 1 and self.tabuleiro[tempi][tempj] == '-'):
+                                        possibilidades.append(self.tabuleirodes[tempi][tempj])
+                                    elif (continuarappend == 1 and self.tabuleiro[tempi][tempj] != '-'):
+                                        break
+                                    tempi = tempi - 1
+                                    tempj = tempj + 1
+                                tempi = i
+                                tempj = j
+                                continuarappend = 0
+                                while (tempi < 8 and tempj >= 0):
+                                    if (continuarappend == 0 and (tempi + 1 < 8) and (tempj - 1 >= 0) and (tempi + 2 < 8) and (tempj - 2 >= 0)):
+                                        if (self.tabuleiro[tempi + 1][tempj - 1] == 'o' or self.tabuleiro[tempi + 1][tempj - 1] == 'O'):
+                                            if (self.tabuleiro[tempi + 2][tempj - 2] == '-'):
+                                                possibilidades.append(self.tabuleirodes[tempi + 2][tempj - 2])
+                                                tempi = tempi + 2
+                                                tempj = tempj - 2
+                                                continuarappend = 1
+                                                self.pulo = 1
+                                            elif (self.tabuleiro[tempi - 2][tempj - 2] != '-'):
+                                                break
+                                    elif (continuarappend == 1 and self.tabuleiro[tempi][tempj] == '-'):
+                                        possibilidades.append(self.tabuleirodes[tempi][tempj])
+                                    elif (continuarappend == 1 and self.tabuleiro[tempi][tempj] != '-'):
+                                        break
+                                    tempi = tempi + 1
+                                    tempj = tempj - 1
+                                tempi = i
+                                tempj = j
+                                continuarappend = 0
+                                while (tempi < 8 and tempj < 8):
+                                    if (continuarappend == 0 and (tempi + 1 < 8) and (tempj + 1 < 8) and (tempi + 2 < 8) and (tempj + 2 < 8)):
+                                        if (self.tabuleiro[tempi + 1][tempj + 1] == 'o' or self.tabuleiro[tempi + 1][tempj + 1] == 'O'):
+                                            if (self.tabuleiro[tempi + 2][tempj + 2] == '-'):
+                                                possibilidades.append(self.tabuleirodes[tempi + 2][tempj + 2])
+                                                tempi = tempi + 2
+                                                tempj = tempj + 2
+                                                continuarappend = 1
+                                                self.pulo = 1
+                                            elif (self.tabuleiro[tempi - 2][tempj - 2] != '-'):
+                                                break
+                                    elif (continuarappend == 1 and self.tabuleiro[tempi][tempj] == '-'):
+                                        possibilidades.append(self.tabuleirodes[tempi][tempj])
+                                    elif (continuarappend == 1 and self.tabuleiro[tempi][tempj] != '-'):
+                                        break
+                                    tempi = tempi + 1
+                                    tempj = tempj + 1
+                            elif(self.tabuleiro[i][j] == 'o'):
                                 # se casas diagonais abaixo:
                                 if (i + 1 < 8 and i + 2 < 8):
                                     # se a casa diagonal existe e tem peça oponente:
@@ -255,7 +337,7 @@ class Jogo:
                                         if ((j + 2) < 8 and self.tabuleiro[i - 2][j + 2] == '-'):
                                             possibilidades.append(self.tabuleirodes[i - 2][j + 2])
                                             self.pulo = 1
-                            if(self.tabuleiro[i][j] == 'O'):
+                            elif(self.tabuleiro[i][j] == 'O'):
                                 tempi = i
                                 tempj = j
                                 continuarappend = 0
@@ -267,6 +349,7 @@ class Jogo:
                                                 tempi = tempi - 2
                                                 tempj = tempj - 2
                                                 continuarappend = 1
+                                                self.pulo = 1
                                             elif(self.tabuleiro[tempi - 2][tempj - 2] != '-'):
                                                 break
                                     elif(continuarappend == 1 and self.tabuleiro[tempi][tempj] == '-'):
@@ -286,6 +369,7 @@ class Jogo:
                                                 tempi = tempi - 2
                                                 tempj = tempj + 2
                                                 continuarappend = 1
+                                                self.pulo = 1
                                             elif (self.tabuleiro[tempi - 2][tempj - 2] != '-'):
                                                 break
                                     elif (continuarappend == 1 and self.tabuleiro[tempi][tempj] == '-'):
@@ -305,6 +389,7 @@ class Jogo:
                                                 tempi = tempi + 2
                                                 tempj = tempj - 2
                                                 continuarappend = 1
+                                                self.pulo = 1
                                             elif (self.tabuleiro[tempi - 2][tempj - 2] != '-'):
                                                 break
                                     elif (continuarappend == 1 and self.tabuleiro[tempi][tempj] == '-'):
@@ -324,6 +409,7 @@ class Jogo:
                                                 tempi = tempi + 2
                                                 tempj = tempj + 2
                                                 continuarappend = 1
+                                                self.pulo = 1
                                             elif (self.tabuleiro[tempi - 2][tempj - 2] != '-'):
                                                 break
                                     elif (continuarappend == 1 and self.tabuleiro[tempi][tempj] == '-'):
@@ -343,12 +429,94 @@ class Jogo:
                                     possibilidades.append(self.tabuleirodes[i+1][j-1])
                                 if((j+1)<8 and self.tabuleiro[i+1][j+1]=='-'):
                                     possibilidades.append(self.tabuleirodes[i+1][j+1])
-                            elif(self.tabuleiro[i][j] == self.jogadores[1]):
+                            elif (self.tabuleiro[i][j] == 'X'):
+                                tempi = i - 1
+                                tempj = j - 1
+                                continuarappend = 0
+                                while (tempi >= 0 and tempj >= 0):
+                                    if(self.tabuleiro[tempi][tempj] == '-'):
+                                        possibilidades.append(self.tabuleirodes[tempi][tempj])
+                                    else:
+                                        break
+                                    tempi = tempi - 1
+                                    tempj = tempj - 1
+                                tempi = i - 1
+                                tempj = j + 1
+                                continuarappend = 0
+                                while (tempi >= 0 and tempj < 8):
+                                    if (self.tabuleiro[tempi][tempj] == '-'):
+                                        possibilidades.append(self.tabuleirodes[tempi][tempj])
+                                    else:
+                                        break
+                                    tempi = tempi - 1
+                                    tempj = tempj + 1
+                                tempi = i + 1
+                                tempj = j - 1
+                                continuarappend = 0
+                                while (tempi < 8 and tempj >= 0):
+                                    if (self.tabuleiro[tempi][tempj] == '-'):
+                                        possibilidades.append(self.tabuleirodes[tempi][tempj])
+                                    else:
+                                        break
+                                    tempi = tempi + 1
+                                    tempj = tempj - 1
+                                tempi = i + 1
+                                tempj = j + 1
+                                continuarappend = 0
+                                while (tempi < 8 and tempj < 8):
+                                    if (self.tabuleiro[tempi][tempj] == '-'):
+                                        possibilidades.append(self.tabuleirodes[tempi][tempj])
+                                    else:
+                                        break
+                                    tempi = tempi + 1
+                                    tempj = tempj + 1
+                            elif(self.tabuleiro[i][j] == 'o'):
                                 # verifica casas diagonais acima
                                 if ((j-1)>=0 and self.tabuleiro[i - 1][j - 1] == '-'):
                                     possibilidades.append(self.tabuleirodes[i - 1][j - 1])
                                 if ((j+1)<8 and self.tabuleiro[i - 1][j + 1] == '-'):
                                     possibilidades.append(self.tabuleirodes[i - 1][j + 1])
+                            elif (self.tabuleiro[i][j] == 'O'):
+                                tempi = i - 1
+                                tempj = j - 1
+                                continuarappend = 0
+                                while (tempi >= 0 and tempj >= 0):
+                                    if(self.tabuleiro[tempi][tempj] == '-'):
+                                        possibilidades.append(self.tabuleirodes[tempi][tempj])
+                                    else:
+                                        break
+                                    tempi = tempi - 1
+                                    tempj = tempj - 1
+                                tempi = i - 1
+                                tempj = j + 1
+                                continuarappend = 0
+                                while (tempi >= 0 and tempj < 8):
+                                    if (self.tabuleiro[tempi][tempj] == '-'):
+                                        possibilidades.append(self.tabuleirodes[tempi][tempj])
+                                    else:
+                                        break
+                                    tempi = tempi - 1
+                                    tempj = tempj + 1
+                                tempi = i + 1
+                                tempj = j - 1
+                                continuarappend = 0
+                                while (tempi < 8 and tempj >= 0):
+                                    if (self.tabuleiro[tempi][tempj] == '-'):
+                                        possibilidades.append(self.tabuleirodes[tempi][tempj])
+                                    else:
+                                        break
+                                    tempi = tempi + 1
+                                    tempj = tempj - 1
+                                tempi = i + 1
+                                tempj = j + 1
+                                continuarappend = 0
+                                while (tempi < 8 and tempj < 8):
+                                    if (self.tabuleiro[tempi][tempj] == '-'):
+                                        possibilidades.append(self.tabuleirodes[tempi][tempj])
+                                    else:
+                                        break
+                                    tempi = tempi + 1
+                                    tempj = tempj + 1
             # a lista de casas possiveis
             return possibilidades
         return None
@@ -385,7 +553,7 @@ class Jogo:
                                 if ((j + 2) < 8 and self.tabuleiro[i - 2][j + 2] == '-'):
                                     Obrigatorias.append(self.tabuleirodes[i][j])
                     #se tem dama com jogada obrigatoria
-                    if(self.tabuleiro[i][j] == 'X'):
+                    elif(self.tabuleiro[i][j] == 'X'):
                         tempi = i
                         tempj = j
                         while(tempi>=0 and tempj>=0):
@@ -406,7 +574,7 @@ class Jogo:
                                     if (self.tabuleiro[tempi - 2][tempj + 2] == '-'):
                                         Obrigatorias.append(self.tabuleirodes[tempi][tempj])
                                         break
-                                    elif (self.tabuleiro[tempi - 2][tempj - 2] != '-'):
+                                    elif (self.tabuleiro[tempi - 2][tempj + 2] != '-'):
                                         break
                             tempi = tempi - 1
                             tempj = tempj + 1
@@ -418,7 +586,7 @@ class Jogo:
                                     if (self.tabuleiro[tempi + 2][tempj - 2] == '-'):
                                         Obrigatorias.append(self.tabuleirodes[tempi][tempj])
                                         break
-                                    elif (self.tabuleiro[tempi - 2][tempj - 2] != '-'):
+                                    elif (self.tabuleiro[tempi + 2][tempj - 2] != '-'):
                                         break
                             tempi = tempi + 1
                             tempj = tempj - 1
@@ -430,7 +598,7 @@ class Jogo:
                                     if (self.tabuleiro[tempi + 2][tempj + 2] == '-'):
                                         Obrigatorias.append(self.tabuleirodes[tempi][tempj])
                                         break
-                                    elif (self.tabuleiro[tempi - 2][tempj - 2] != '-'):
+                                    elif (self.tabuleiro[tempi + 2][tempj + 2] != '-'):
                                         break
                             tempi = tempi + 1
                             tempj = tempj + 1
@@ -463,7 +631,7 @@ class Jogo:
                                 if ((j + 2) < 8 and self.tabuleiro[i - 2][j + 2] == '-'):
                                     Obrigatorias.append(self.tabuleirodes[i][j])
                     #se tem dama com jogada obrigatoria
-                    if (self.tabuleiro[i][j] == 'O'):
+                    elif (self.tabuleiro[i][j] == 'O'):
                         tempi = i
                         tempj = j
                         while (tempi >= 0 and tempj >= 0):
@@ -471,6 +639,8 @@ class Jogo:
                                 if (self.tabuleiro[tempi - 1][tempj - 1] == 'x' or self.tabuleiro[tempi - 1][tempj - 1] == 'X'):
                                     if (self.tabuleiro[tempi - 2][tempj - 2] == '-'):
                                         Obrigatorias.append(self.tabuleirodes[i][j])
+                                        break
+                                    elif (self.tabuleiro[tempi - 2][tempj - 2] != '-'):
                                         break
                             tempi = tempi - 1
                             tempj = tempj - 1
@@ -482,6 +652,8 @@ class Jogo:
                                     if (self.tabuleiro[tempi - 2][tempj + 2] == '-'):
                                         Obrigatorias.append(self.tabuleirodes[i][j])
                                         break
+                                    elif (self.tabuleiro[tempi - 2][tempj + 2] != '-'):
+                                        break
                             tempi = tempi - 1
                             tempj = tempj + 1
                         tempi = i
@@ -492,6 +664,8 @@ class Jogo:
                                     if (self.tabuleiro[tempi + 2][tempj - 2] == '-'):
                                         Obrigatorias.append(self.tabuleirodes[i][j])
                                         break
+                                    elif (self.tabuleiro[tempi + 2][tempj - 2] != '-'):
+                                        break
                             tempi = tempi + 1
                             tempj = tempj - 1
                         tempi = i
@@ -501,6 +675,8 @@ class Jogo:
                                 if (self.tabuleiro[tempi + 1][tempj + 1] == 'x' or self.tabuleiro[tempi + 1][tempj + 1] == 'X'):
                                     if (self.tabuleiro[tempi + 2][tempj + 2] == '-'):
                                         Obrigatorias.append(self.tabuleirodes[i][j])
+                                        break
+                                    elif (self.tabuleiro[tempi + 2][tempj + 2] != '-'):
                                         break
                             tempi = tempi + 1
                             tempj = tempj + 1
@@ -530,7 +706,7 @@ class Jogo:
             if(self.casa_selecionada):
                 print("achou casa selecionada")
                 #se a peça na casa selecionada pertence ao jogador
-                if (peca) and (self.tabuleiro[peca[0]][peca[1]] == 'o'):
+                if (peca) and (self.tabuleiro[peca[0]][peca[1]] == 'o' or self.tabuleiro[peca[0]][peca[1]] == 'O'):
                     print("a peça da seleção tem a peça do jogador")
                     #verifica se há jogadas possiveis
                     if(self.lista_possibilidades):
@@ -540,10 +716,7 @@ class Jogo:
                         pos = self.mouse.get_position()
                         for i in range(8):
                             for j in range(8):
-                                if ((self.tabuleirodes[i][j].x < pos[0]) and (
-                                        (self.tabuleirodes[i][j].x + self.tamcasa) > pos[0]) and (
-                                        self.tabuleirodes[i][j].y < pos[1]) and (
-                                        (self.tabuleirodes[i][j].y + self.tamcasa) > pos[1])):
+                                if ((self.tabuleirodes[i][j].x < pos[0]) and ((self.tabuleirodes[i][j].x + self.tamcasa) > pos[0]) and (self.tabuleirodes[i][j].y < pos[1]) and ((self.tabuleirodes[i][j].y + self.tamcasa) > pos[1])):
                                     jogadai = i
                                     jogadaj = j
                         #verifica se o clique foi em celula possivel
@@ -577,13 +750,33 @@ class Jogo:
         return None
     def comer(self, coordpecai, coordpecaj, coordjogi, coordjogj):
         if (coordpecai > coordjogi) and (coordpecaj > coordjogj):
-            self.tabuleiro[coordpecai-1][coordpecaj-1] = '-'
+            i = coordpecai - 1
+            j = coordpecaj - 1
+            while(i > coordjogi) and (j > coordjogj):
+                self.tabuleiro[i][j] = '-'
+                i = i - 1
+                j = j - 1
         elif (coordpecai > coordjogi) and (coordpecaj < coordjogj):
-            self.tabuleiro[coordpecai - 1][coordpecaj + 1] = '-'
+            i = coordpecai - 1
+            j = coordpecaj + 1
+            while (i > coordjogi) and (j < coordjogj):
+                self.tabuleiro[i][j] = '-'
+                i = i - 1
+                j = j + 1
         elif (coordpecai < coordjogi) and (coordpecaj > coordjogj):
-            self.tabuleiro[coordpecai + 1][coordpecaj - 1] = '-'
+            i = coordpecai + 1
+            j = coordpecaj - 1
+            while (i < coordjogi) and (j > coordjogj):
+                self.tabuleiro[i][j] = '-'
+                i = i + 1
+                j = j - 1
         elif (coordpecai < coordjogi) and (coordpecaj < coordjogj):
-            self.tabuleiro[coordpecai + 1][coordpecaj + 1] = '-'
+            i = coordpecai + 1
+            j = coordpecaj + 1
+            while (i < coordjogi) and (j < coordjogj):
+                self.tabuleiro[i][j] = '-'
+                i = i + 1
+                j = j + 1
         return None
 
     def turnoia(self):
