@@ -36,6 +36,7 @@ class Jogo:
         self.lista_obrigatorias = None
         self.pecapulo = None
         self.pulo = 0
+        self.continuapulo = 0
         
         #criar tabuleiro
         self.tabuleirodes = []
@@ -95,9 +96,9 @@ class Jogo:
                           ['-', 'x', '-', 'x', '-', '-', '-', 'x'],
                           ['x', '-', 'x', '-', '-', '-', 'x', '-'],
                           ['-', '-', '-', '-', '-', '-', '-', '-'],
-                          ['-', '-', '-', '-', '-', '-', '-', '-'],
-                          ['-', 'o', '-', '-', '-', 'o', '-', 'o'],
-                          ['o', '-', 'o', '-', 'o', '-', 'o', '-'],
+                          ['-', '-', '-', '-', '-', '-', 'x', '-'],
+                          ['-', 'o', '-', '-', '-', '-', '-', 'o'],
+                          ['o', '-', 'o', '-', 'x', '-', 'o', '-'],
                           ['-', 'o', '-', 'o', '-', 'o', '-', 'o']]
 
     def desenhatabuleiro(self):
@@ -560,7 +561,7 @@ class Jogo:
                             if(tempi-1>=0 and tempj-1>=0 and tempi-2>=0 and tempj-2>=0):
                                 if(self.tabuleiro[tempi-1][tempj-1] == 'o' or self.tabuleiro[tempi-1][tempj-1] == 'O'):
                                     if(self.tabuleiro[tempi-2][tempj-2] == '-'):
-                                        Obrigatorias.append(self.tabuleirodes[tempi][tempj])
+                                        Obrigatorias.append(self.tabuleirodes[i][j])
                                         break
                                     elif (self.tabuleiro[tempi - 2][tempj - 2] != '-'):
                                         break
@@ -572,7 +573,7 @@ class Jogo:
                             if ((tempi - 1 >= 0) and (tempj + 1 < 8) and (tempi - 2 >= 0) and (tempj + 2 < 8)):
                                 if (self.tabuleiro[tempi - 1][tempj + 1] == 'o' or self.tabuleiro[tempi - 1][tempj + 1] == 'O'):
                                     if (self.tabuleiro[tempi - 2][tempj + 2] == '-'):
-                                        Obrigatorias.append(self.tabuleirodes[tempi][tempj])
+                                        Obrigatorias.append(self.tabuleirodes[i][j])
                                         break
                                     elif (self.tabuleiro[tempi - 2][tempj + 2] != '-'):
                                         break
@@ -584,7 +585,7 @@ class Jogo:
                             if ((tempi + 1 < 8) and (tempj - 1 >= 0) and (tempi + 2 < 8) and (tempj - 2 >= 0)):
                                 if (self.tabuleiro[tempi + 1][tempj - 1] == 'o' or self.tabuleiro[tempi + 1][tempj - 1] == 'O'):
                                     if (self.tabuleiro[tempi + 2][tempj - 2] == '-'):
-                                        Obrigatorias.append(self.tabuleirodes[tempi][tempj])
+                                        Obrigatorias.append(self.tabuleirodes[i][j])
                                         break
                                     elif (self.tabuleiro[tempi + 2][tempj - 2] != '-'):
                                         break
@@ -596,7 +597,7 @@ class Jogo:
                             if ((tempi + 1 < 8) and (tempj + 1 < 8) and (tempi + 2 < 8) and (tempj + 2 < 8)):
                                 if (self.tabuleiro[tempi + 1][tempj + 1] == 'o' or self.tabuleiro[tempi + 1][tempj + 1] == 'O'):
                                     if (self.tabuleiro[tempi + 2][tempj + 2] == '-'):
-                                        Obrigatorias.append(self.tabuleirodes[tempi][tempj])
+                                        Obrigatorias.append(self.tabuleirodes[i][j])
                                         break
                                     elif (self.tabuleiro[tempi + 2][tempj + 2] != '-'):
                                         break
@@ -608,18 +609,16 @@ class Jogo:
                     if(self.tabuleiro[i][j] == 'o'):
                         if (i + 1 < 8 and i + 2 < 8):
                             # se a casa diagonal existe e tem peça oponente:
-                            if ((j - 1) >= 0 and (
-                                    self.tabuleiro[i + 1][j - 1] == 'x' or self.tabuleiro[i + 1][j - 1] == 'X')):
+                            if ((j - 1) >= 0 and (self.tabuleiro[i + 1][j - 1] == 'x' or self.tabuleiro[i + 1][j - 1] == 'X')):
                                 # verifica se existe casa vazia na mesma diagonal
                                 if ((j - 2) >= 0 and self.tabuleiro[i + 2][j - 2] == '-'):
                                     Obrigatorias.append(self.tabuleirodes[i][j])
                             # se a outra diagonal existe e tem peça oponente:
-                            if ((j + 1) < 8 and (
-                                    self.tabuleiro[i + 1][j + 1] == 'x' or self.tabuleiro[i + 1][j + 1] == 'X')):
+                            if ((j + 1) < 8 and (self.tabuleiro[i + 1][j + 1] == 'x' or self.tabuleiro[i + 1][j + 1] == 'X')):
                                 # verifica se existe casa vazia na mesma diagonal
                                 if ((j + 2) < 8 and self.tabuleiro[i + 2][j + 2] == '-'):
                                     Obrigatorias.append(self.tabuleirodes[i][j])
-                        if (i < 1 >= 8 and i - 2 >=0):
+                        if (i - 1 >= 0 and i - 2 >=0):
                             # se a outra casa diagonal existe e tem peça oponente:
                             if ((j - 1) >= 0 and (self.tabuleiro[i - 1][j - 1] == 'x' or self.tabuleiro[i - 1][j - 1] == 'X')):
                                 # verifica se existe casa vazia na mesma diagonal
@@ -687,7 +686,10 @@ class Jogo:
 
     def turnojogador(self):
         #verificar se há jogadas obrigatorias
-        self.lista_obrigatorias = self.verificarObrigatorias()
+        if(self.continuapulo == 0):
+            self.lista_obrigatorias = self.verificarObrigatorias()
+
+        print(self.lista_obrigatorias)
         self.lista_possibilidades = self.verificarjogadas()
         #print("obrigatorias: ", self.lista_obrigatorias)
         #definir peça
@@ -701,13 +703,13 @@ class Jogo:
                         peca = (i, j)
         #verificar se ha clique no mouse
         if(self.mouse.is_button_pressed(1)):
-            print("entrou no loop")
+            #print("entrou no loop")
             #verifica se há célula selecionada
             if(self.casa_selecionada):
-                print("achou casa selecionada")
+                #print("achou casa selecionada")
                 #se a peça na casa selecionada pertence ao jogador
                 if (peca) and (self.tabuleiro[peca[0]][peca[1]] == 'o' or self.tabuleiro[peca[0]][peca[1]] == 'O'):
-                    print("a peça da seleção tem a peça do jogador")
+                    #print("a peça da seleção tem a peça do jogador")
                     #verifica se há jogadas possiveis
                     if(self.lista_possibilidades):
                         #onde foi o clique:
@@ -721,9 +723,9 @@ class Jogo:
                                     jogadaj = j
                         #verifica se o clique foi em celula possivel
                         for elemento in self.lista_possibilidades:
-                            print("chegou aqui ", "peca ",peca[0], peca[1], "jogada ", jogadai, jogadaj)
-                            print("compara x:", elemento.x, self.tabuleirodes[jogadai][jogadaj].x)
-                            print("compara y:", elemento.y, self.tabuleirodes[jogadai][jogadaj].y)
+                            #print("chegou aqui ", "peca ",peca[0], peca[1], "jogada ", jogadai, jogadaj)
+                            #print("compara x:", elemento.x, self.tabuleirodes[jogadai][jogadaj].x)
+                            #print("compara y:", elemento.y, self.tabuleirodes[jogadai][jogadaj].y)
                             if ((elemento.x == self.tabuleirodes[jogadai][jogadaj].x)and(elemento.y == self.tabuleirodes[jogadai][jogadaj].y)):
                                 #jogada valida, prosseguir troca
                                 print("valida-prosseguir troca")
@@ -731,13 +733,18 @@ class Jogo:
                                 self.tabuleiro[jogadai][jogadaj] = self.tabuleiro[peca[0]][peca[1]]
                                 self.tabuleiro[peca[0]][peca[1]] = temp
                                 if self.pulo == 1:
+                                    self.continuapulo = 0
                                     self.comer(peca[0], peca[1], jogadai, jogadaj)
                                     self.pulo = 0
+                                    print(self.tabuleiro[jogadai][jogadaj])
+                                    self.lista_obrigatorias = self.encadeamento(jogadai, jogadaj, self.tabuleiro[jogadai][jogadaj])
+                                    print(self.lista_obrigatorias)
+                                    if(self.lista_obrigatorias != None):
+                                        self.continuapulo = 1
                                 print("jogou")
                                 #self.turno = 0
                                 self.casa_selecionada = None
                                 self.lista_possibilidades = None
-                                self.lista_obrigatorias = None
                             else:
                                 self.selecionar()
                     #se não há, selecionar
@@ -777,6 +784,164 @@ class Jogo:
                 self.tabuleiro[i][j] = '-'
                 i = i + 1
                 j = j + 1
+        return None
+
+    def encadeamento(self, i, j, peca):
+        listaencadeamento = []
+        #verificar para peao x
+        if(peca == 'x'):
+            # se casas diagonais abaixo:
+            if (i + 1 < 8 and i + 2 < 8):
+                # se a diagonal existe e tem peça oponente:
+                if ((j - 1) >= 0 and (self.tabuleiro[i + 1][j - 1] == 'o' or self.tabuleiro[i + 1][j - 1] == 'O')):
+                    # verifica se existe casa vazia na mesma diagonal
+                    if ((j - 2) >= 0 and self.tabuleiro[i + 2][j - 2] == '-'):
+                        listaencadeamento.append(self.tabuleirodes[i][j])
+                # se a outra diagonal existe e tem peça oponente:
+                if ((j + 1) < 8 and (self.tabuleiro[i + 1][j + 1] == 'o' or self.tabuleiro[i + 1][j + 1] == 'O')):
+                    # verifica se existe casa vazia na mesma diagonal
+                    if ((j + 2) < 8 and self.tabuleiro[i + 2][j + 2] == '-'):
+                        listaencadeamento.append(self.tabuleirodes[i][j])
+            # se casas diagonais acima:
+            if (i - 1 >= 0 and i - 2 >= 0):
+                # se a diagonal existe e tem peça oponente:
+                if ((j - 1) >= 0 and (self.tabuleiro[i - 1][j - 1] == 'o' or self.tabuleiro[i - 1][j - 1] == 'O')):
+                    # verifica se existe casa vazia na mesma diagonal
+                    if ((j - 2) >= 0 and self.tabuleiro[i - 2][j - 2] == '-'):
+                        listaencadeamento.append(self.tabuleirodes[i][j])
+                # se a outra diagonal existe e tem peça oponente:
+                if ((j + 1) < 8 and (self.tabuleiro[i - 1][j + 1] == 'o' or self.tabuleiro[i - 1][j + 1] == 'O')):
+                    # verifica se existe casa vazia na mesma diagonal
+                    if ((j + 2) < 8 and self.tabuleiro[i - 2][j + 2] == '-'):
+                        listaencadeamento.append(self.tabuleirodes[i][j])
+        # Verificar encadeamento de dama X
+        elif (self.tabuleiro[i][j] == 'X'):
+            tempi = i
+            tempj = j
+            while (tempi >= 0 and tempj >= 0):
+                if (tempi - 1 >= 0 and tempj - 1 >= 0 and tempi - 2 >= 0 and tempj - 2 >= 0):
+                    if (self.tabuleiro[tempi - 1][tempj - 1] == 'o' or self.tabuleiro[tempi - 1][tempj - 1] == 'O'):
+                        if (self.tabuleiro[tempi - 2][tempj - 2] == '-'):
+                            listaencadeamento.append(self.tabuleirodes[i][j])
+                            break
+                        elif (self.tabuleiro[tempi - 2][tempj - 2] != '-'):
+                            break
+                tempi = tempi - 1
+                tempj = tempj - 1
+            tempi = i
+            tempj = j
+            while (tempi >= 0 and tempj < 8):
+                if ((tempi - 1 >= 0) and (tempj + 1 < 8) and (tempi - 2 >= 0) and (tempj + 2 < 8)):
+                    if (self.tabuleiro[tempi - 1][tempj + 1] == 'o' or self.tabuleiro[tempi - 1][tempj + 1] == 'O'):
+                        if (self.tabuleiro[tempi - 2][tempj + 2] == '-'):
+                            listaencadeamento.append(self.tabuleirodes[i][j])
+                            break
+                        elif (self.tabuleiro[tempi - 2][tempj + 2] != '-'):
+                            break
+                tempi = tempi - 1
+                tempj = tempj + 1
+            tempi = i
+            tempj = j
+            while (tempi < 8 and tempj >= 0):
+                if ((tempi + 1 < 8) and (tempj - 1 >= 0) and (tempi + 2 < 8) and (tempj - 2 >= 0)):
+                    if (self.tabuleiro[tempi + 1][tempj - 1] == 'o' or self.tabuleiro[tempi + 1][tempj - 1] == 'O'):
+                        if (self.tabuleiro[tempi + 2][tempj - 2] == '-'):
+                            listaencadeamento.append(self.tabuleirodes[i][j])
+                            break
+                        elif (self.tabuleiro[tempi + 2][tempj - 2] != '-'):
+                            break
+                tempi = tempi + 1
+                tempj = tempj - 1
+            tempi = i
+            tempj = j
+            while (tempi < 8 and tempj < 8):
+                if ((tempi + 1 < 8) and (tempj + 1 < 8) and (tempi + 2 < 8) and (tempj + 2 < 8)):
+                    if (self.tabuleiro[tempi + 1][tempj + 1] == 'o' or self.tabuleiro[tempi + 1][tempj + 1] == 'O'):
+                        if (self.tabuleiro[tempi + 2][tempj + 2] == '-'):
+                            listaencadeamento.append(self.tabuleirodes[i][j])
+                            break
+                        elif (self.tabuleiro[tempi + 2][tempj + 2] != '-'):
+                            break
+                tempi = tempi + 1
+                tempj = tempj + 1
+        #encadeamento de peao o
+        if (peca == 'o'):
+            if (i + 1 < 8 and i + 2 < 8):
+                # se a casa diagonal existe e tem peça oponente:
+                if ((j - 1) >= 0 and (
+                        self.tabuleiro[i + 1][j - 1] == 'x' or self.tabuleiro[i + 1][j - 1] == 'X')):
+                    # verifica se existe casa vazia na mesma diagonal
+                    if ((j - 2) >= 0 and self.tabuleiro[i + 2][j - 2] == '-'):
+                        listaencadeamento.append(self.tabuleirodes[i][j])
+                # se a outra diagonal existe e tem peça oponente:
+                if ((j + 1) < 8 and (
+                        self.tabuleiro[i + 1][j + 1] == 'x' or self.tabuleiro[i + 1][j + 1] == 'X')):
+                    # verifica se existe casa vazia na mesma diagonal
+                    if ((j + 2) < 8 and self.tabuleiro[i + 2][j + 2] == '-'):
+                        listaencadeamento.append(self.tabuleirodes[i][j])
+            if (i < 1 >= 8 and i - 2 >= 0):
+                # se a outra casa diagonal existe e tem peça oponente:
+                if ((j - 1) >= 0 and (self.tabuleiro[i - 1][j - 1] == 'x' or self.tabuleiro[i - 1][j - 1] == 'X')):
+                    # verifica se existe casa vazia na mesma diagonal
+                    if ((j - 2) >= 0 and self.tabuleiro[i - 2][j - 2] == '-'):
+                        listaencadeamento.append(self.tabuleirodes[i][j])
+                # se a outra diagonal existe e tem peça oponente:
+                if ((j + 1) < 8 and (self.tabuleiro[i - 1][j + 1] == 'x' or self.tabuleiro[i - 1][j + 1] == 'X')):
+                    # verifica se existe casa vazia na mesma diagonal
+                    if ((j + 2) < 8 and self.tabuleiro[i - 2][j + 2] == '-'):
+                        listaencadeamento.append(self.tabuleirodes[i][j])
+        # Encadeamento de dama O
+        elif (peca == 'O'):
+            tempi = i
+            tempj = j
+            while (tempi >= 0 and tempj >= 0):
+                if (tempi - 1 >= 0 and tempj - 1 >= 0 and tempi - 2 >= 0 and tempj - 2 >= 0):
+                    if (self.tabuleiro[tempi - 1][tempj - 1] == 'x' or self.tabuleiro[tempi - 1][tempj - 1] == 'X'):
+                        if (self.tabuleiro[tempi - 2][tempj - 2] == '-'):
+                            listaencadeamento.append(self.tabuleirodes[i][j])
+                            break
+                        elif (self.tabuleiro[tempi - 2][tempj - 2] != '-'):
+                            break
+                tempi = tempi - 1
+                tempj = tempj - 1
+            tempi = i
+            tempj = j
+            while (tempi >= 0 and tempj < 8):
+                if ((tempi - 1 >= 0) and (tempj + 1 < 8) and (tempi - 2 >= 0) and (tempj + 2 < 8)):
+                    if (self.tabuleiro[tempi - 1][tempj + 1] == 'x' or self.tabuleiro[tempi - 1][tempj + 1] == 'X'):
+                        if (self.tabuleiro[tempi - 2][tempj + 2] == '-'):
+                            listaencadeamento.append(self.tabuleirodes[i][j])
+                            break
+                        elif (self.tabuleiro[tempi - 2][tempj + 2] != '-'):
+                            break
+                tempi = tempi - 1
+                tempj = tempj + 1
+            tempi = i
+            tempj = j
+            while (tempi < 8 and tempj >= 0):
+                if ((tempi + 1 < 8) and (tempj - 1 >= 0) and (tempi + 2 < 8) and (tempj - 2 >= 0)):
+                    if (self.tabuleiro[tempi + 1][tempj - 1] == 'x' or self.tabuleiro[tempi + 1][tempj - 1] == 'X'):
+                        if (self.tabuleiro[tempi + 2][tempj - 2] == '-'):
+                            listaencadeamento.append(self.tabuleirodes[i][j])
+                            break
+                        elif (self.tabuleiro[tempi + 2][tempj - 2] != '-'):
+                            break
+                tempi = tempi + 1
+                tempj = tempj - 1
+            tempi = i
+            tempj = j
+            while (tempi < 8 and tempj < 8):
+                if ((tempi + 1 < 8) and (tempj + 1 < 8) and (tempi + 2 < 8) and (tempj + 2 < 8)):
+                    if (self.tabuleiro[tempi + 1][tempj + 1] == 'x' or self.tabuleiro[tempi + 1][tempj + 1] == 'X'):
+                        if (self.tabuleiro[tempi + 2][tempj + 2] == '-'):
+                            listaencadeamento.append(self.tabuleirodes[i][j])
+                            break
+                        elif (self.tabuleiro[tempi + 2][tempj + 2] != '-'):
+                            break
+                tempi = tempi + 1
+                tempj = tempj + 1
+        if(listaencadeamento != []):
+            return listaencadeamento
         return None
 
     def turnoia(self):
