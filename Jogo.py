@@ -190,6 +190,60 @@ class Jogo:
         pygame.time.wait(200)
         return None
 
+    #peça 1: representação do peao, peça 2: representação da dama (a função deve ser adaptada para cada turno)
+    def verificarsehajogadaspossiveis(self, peca1, peca2):
+        possibilidades = []
+        # pra cada celula
+        for i in range(8):
+            for j in range(8):
+                if (self.tabuleiro[i][j] == peca1):
+                    # verifica casas diagonais abaixo
+                    if ((j - 1) >= 0 and self.tabuleiro[i + 1][j - 1] == '-'):
+                        possibilidades.append(self.tabuleirodes[i + 1][j - 1])
+                    if ((j + 1) < 8 and self.tabuleiro[i + 1][j + 1] == '-'):
+                        possibilidades.append(self.tabuleirodes[i + 1][j + 1])
+                elif (self.tabuleiro[i][j] == peca2):
+                    tempi = i - 1
+                    tempj = j - 1
+                    while (tempi >= 0 and tempj >= 0):
+                        if (self.tabuleiro[tempi][tempj] == '-'):
+                            possibilidades.append(self.tabuleirodes[tempi][tempj])
+                        else:
+                            break
+                        tempi = tempi - 1
+                        tempj = tempj - 1
+                    tempi = i - 1
+                    tempj = j + 1
+                    while (tempi >= 0 and tempj < 8):
+                        if (self.tabuleiro[tempi][tempj] == '-'):
+                            possibilidades.append(self.tabuleirodes[tempi][tempj])
+                        else:
+                            break
+                        tempi = tempi - 1
+                        tempj = tempj + 1
+                    tempi = i + 1
+                    tempj = j - 1
+                    while (tempi < 8 and tempj >= 0):
+                        if (self.tabuleiro[tempi][tempj] == '-'):
+                            possibilidades.append(self.tabuleirodes[tempi][tempj])
+                        else:
+                            break
+                        tempi = tempi + 1
+                        tempj = tempj - 1
+                    tempi = i + 1
+                    tempj = j + 1
+                    while (tempi < 8 and tempj < 8):
+                        if (self.tabuleiro[tempi][tempj] == '-'):
+                            possibilidades.append(self.tabuleirodes[tempi][tempj])
+                        else:
+                            break
+                        tempi = tempi + 1
+                        tempj = tempj + 1
+        # a lista de casas possiveis
+        if(possibilidades!= []):
+            return 1
+        return 0
+
     def verificarjogadas(self):
         #lista de marcadas
         if(self.casa_selecionada):
@@ -684,77 +738,6 @@ class Jogo:
             return Obrigatorias
         return None
 
-    def turnojogador(self):
-        #verificar se há jogadas obrigatorias
-        if(self.continuapulo == 0):
-            self.lista_obrigatorias = self.verificarObrigatorias()
-
-        print(self.lista_obrigatorias)
-        self.lista_possibilidades = self.verificarjogadas()
-        #print("obrigatorias: ", self.lista_obrigatorias)
-        #definir peça
-        peca = ''
-        # Se houver, Recuperar casa selecionada na matriz de jogo
-        if(self.casa_selecionada):
-            for i in range(8):
-                for j in range(8):
-                    if (self.tabuleirodes[i][j].x == self.selecionada.x) and (
-                            self.tabuleirodes[i][j].y == self.selecionada.y):
-                        peca = (i, j)
-        #verificar se ha clique no mouse
-        if(self.mouse.is_button_pressed(1)):
-            #print("entrou no loop")
-            #verifica se há célula selecionada
-            if(self.casa_selecionada):
-                #print("achou casa selecionada")
-                #se a peça na casa selecionada pertence ao jogador
-                if (peca) and (self.tabuleiro[peca[0]][peca[1]] == 'o' or self.tabuleiro[peca[0]][peca[1]] == 'O'):
-                    #print("a peça da seleção tem a peça do jogador")
-                    #verifica se há jogadas possiveis
-                    if(self.lista_possibilidades):
-                        #onde foi o clique:
-                        jogadai = ''
-                        jogadaj = ''
-                        pos = self.mouse.get_position()
-                        for i in range(8):
-                            for j in range(8):
-                                if ((self.tabuleirodes[i][j].x < pos[0]) and ((self.tabuleirodes[i][j].x + self.tamcasa) > pos[0]) and (self.tabuleirodes[i][j].y < pos[1]) and ((self.tabuleirodes[i][j].y + self.tamcasa) > pos[1])):
-                                    jogadai = i
-                                    jogadaj = j
-                        #verifica se o clique foi em celula possivel
-                        for elemento in self.lista_possibilidades:
-                            #print("chegou aqui ", "peca ",peca[0], peca[1], "jogada ", jogadai, jogadaj)
-                            #print("compara x:", elemento.x, self.tabuleirodes[jogadai][jogadaj].x)
-                            #print("compara y:", elemento.y, self.tabuleirodes[jogadai][jogadaj].y)
-                            if ((elemento.x == self.tabuleirodes[jogadai][jogadaj].x)and(elemento.y == self.tabuleirodes[jogadai][jogadaj].y)):
-                                #jogada valida, prosseguir troca
-                                print("valida-prosseguir troca")
-                                temp = self.tabuleiro[jogadai][jogadaj]
-                                self.tabuleiro[jogadai][jogadaj] = self.tabuleiro[peca[0]][peca[1]]
-                                self.tabuleiro[peca[0]][peca[1]] = temp
-                                if self.pulo == 1:
-                                    self.continuapulo = 0
-                                    self.comer(peca[0], peca[1], jogadai, jogadaj)
-                                    self.pulo = 0
-                                    print(self.tabuleiro[jogadai][jogadaj])
-                                    self.lista_obrigatorias = self.encadeamento(jogadai, jogadaj, self.tabuleiro[jogadai][jogadaj])
-                                    print(self.lista_obrigatorias)
-                                    if(self.lista_obrigatorias != None):
-                                        self.continuapulo = 1
-                                print("jogou")
-                                #self.turno = 0
-                                self.casa_selecionada = None
-                                self.lista_possibilidades = None
-                            else:
-                                self.selecionar()
-                    #se não há, selecionar
-                    self.selecionar()
-                else:
-                    self.selecionar()
-            else:
-                self.selecionar()
-
-        return None
     def comer(self, coordpecai, coordpecaj, coordjogi, coordjogj):
         if (coordpecai > coordjogi) and (coordpecaj > coordjogj):
             i = coordpecai - 1
@@ -868,18 +851,16 @@ class Jogo:
         if (peca == 'o'):
             if (i + 1 < 8 and i + 2 < 8):
                 # se a casa diagonal existe e tem peça oponente:
-                if ((j - 1) >= 0 and (
-                        self.tabuleiro[i + 1][j - 1] == 'x' or self.tabuleiro[i + 1][j - 1] == 'X')):
+                if ((j - 1) >= 0 and (self.tabuleiro[i + 1][j - 1] == 'x' or self.tabuleiro[i + 1][j - 1] == 'X')):
                     # verifica se existe casa vazia na mesma diagonal
                     if ((j - 2) >= 0 and self.tabuleiro[i + 2][j - 2] == '-'):
                         listaencadeamento.append(self.tabuleirodes[i][j])
                 # se a outra diagonal existe e tem peça oponente:
-                if ((j + 1) < 8 and (
-                        self.tabuleiro[i + 1][j + 1] == 'x' or self.tabuleiro[i + 1][j + 1] == 'X')):
+                if ((j + 1) < 8 and (self.tabuleiro[i + 1][j + 1] == 'x' or self.tabuleiro[i + 1][j + 1] == 'X')):
                     # verifica se existe casa vazia na mesma diagonal
                     if ((j + 2) < 8 and self.tabuleiro[i + 2][j + 2] == '-'):
                         listaencadeamento.append(self.tabuleirodes[i][j])
-            if (i < 1 >= 8 and i - 2 >= 0):
+            if (i - 1 >= 0 and i - 2 >= 0):
                 # se a outra casa diagonal existe e tem peça oponente:
                 if ((j - 1) >= 0 and (self.tabuleiro[i - 1][j - 1] == 'x' or self.tabuleiro[i - 1][j - 1] == 'X')):
                     # verifica se existe casa vazia na mesma diagonal
@@ -942,6 +923,88 @@ class Jogo:
                 tempj = tempj + 1
         if(listaencadeamento != []):
             return listaencadeamento
+        return None
+
+    def turnojogador(self):
+        #verificar se há jogadas obrigatorias
+        if(self.continuapulo == 0):
+            self.lista_obrigatorias = self.verificarObrigatorias()
+        #se não há jogadas obrigatorias verificar se há jogadas validas
+        if(self.lista_obrigatorias == None):
+            valido = self.verificarsehajogadaspossiveis('o', 'O')
+            if(valido == 0):
+                self.cena = "lose"
+        #print(self.lista_obrigatorias)
+        self.lista_possibilidades = self.verificarjogadas()
+        #print("obrigatorias: ", self.lista_obrigatorias)
+        #definir peça
+        peca = ''
+        # Se houver, Recuperar casa selecionada na matriz de jogo
+        if(self.casa_selecionada):
+            for i in range(8):
+                for j in range(8):
+                    if (self.tabuleirodes[i][j].x == self.selecionada.x) and (
+                            self.tabuleirodes[i][j].y == self.selecionada.y):
+                        peca = (i, j)
+        #verificar se ha clique no mouse
+        if(self.mouse.is_button_pressed(1)):
+            #print("entrou no loop")
+            #verifica se há célula selecionada
+            if(self.casa_selecionada):
+                #print("achou casa selecionada")
+                #se a peça na casa selecionada pertence ao jogador
+                if (peca) and (self.tabuleiro[peca[0]][peca[1]] == 'o' or self.tabuleiro[peca[0]][peca[1]] == 'O'):
+                    #print("a peça da seleção tem a peça do jogador")
+                    #verifica se há jogadas possiveis
+                    if(self.lista_possibilidades):
+                        #onde foi o clique:
+                        jogadai = ''
+                        jogadaj = ''
+                        pos = self.mouse.get_position()
+                        for i in range(8):
+                            for j in range(8):
+                                if ((self.tabuleirodes[i][j].x < pos[0]) and ((self.tabuleirodes[i][j].x + self.tamcasa) > pos[0]) and (self.tabuleirodes[i][j].y < pos[1]) and ((self.tabuleirodes[i][j].y + self.tamcasa) > pos[1])):
+                                    jogadai = i
+                                    jogadaj = j
+                        #verifica se o clique foi em celula possivel
+                        for elemento in self.lista_possibilidades:
+                            #print("chegou aqui ", "peca ",peca[0], peca[1], "jogada ", jogadai, jogadaj)
+                            #print("compara x:", elemento.x, self.tabuleirodes[jogadai][jogadaj].x)
+                            #print("compara y:", elemento.y, self.tabuleirodes[jogadai][jogadaj].y)
+                            if ((elemento.x == self.tabuleirodes[jogadai][jogadaj].x)and(elemento.y == self.tabuleirodes[jogadai][jogadaj].y)):
+                                #jogada valida, prosseguir troca
+                                print("valida-prosseguir troca")
+                                temp = self.tabuleiro[jogadai][jogadaj]
+                                self.tabuleiro[jogadai][jogadaj] = self.tabuleiro[peca[0]][peca[1]]
+                                self.tabuleiro[peca[0]][peca[1]] = temp
+                                if self.pulo == 1:
+                                    self.continuapulo = 0
+                                    self.comer(peca[0], peca[1], jogadai, jogadaj)
+                                    self.pulo = 0
+                                    print(self.tabuleiro[jogadai][jogadaj])
+                                    self.lista_obrigatorias = self.encadeamento(jogadai, jogadaj, self.tabuleiro[jogadai][jogadaj])
+                                    print(self.lista_obrigatorias)
+                                    if(self.lista_obrigatorias != None):
+                                        self.continuapulo = 1
+                                        self.pulo = 1
+                                        print("continua pulo")
+                                    else:
+                                        self.turno = 0
+                                        print("virou turno")
+                                else:
+                                    self.turno = 0
+                                    print("virou turno")
+                                print("jogou")
+                                self.casa_selecionada = None
+                                self.lista_possibilidades = None
+                            else:
+                                self.selecionar()
+                    #se não há, selecionar
+                    self.selecionar()
+                else:
+                    self.selecionar()
+            else:
+                self.selecionar()
         return None
 
     def turnoia(self):
