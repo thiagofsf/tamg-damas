@@ -47,7 +47,9 @@ while True:
     elif cena.getCena() == 'game':
         telajogo.jogo()
     elif cena.getCena() == 'win':
+        telajogo = Jogo(cena, window, mouse)
         telavitoria.vitoria()
     elif cena.getCena() == 'lose':
+        telajogo = Jogo(cena, window, mouse)
         teladerrota.derrota()
     window.update()

@@ -952,7 +952,7 @@ class Jogo:
                         peca = (i, j)
         #verificar se ha clique no mouse
         if(self.mouse.is_button_pressed(1)):
-            print("entrou no loop")
+            #print("entrou no loop")
             #verifica se há célula selecionada
             if(self.casa_selecionada):
                 #print("achou casa selecionada")
@@ -977,7 +977,7 @@ class Jogo:
                             #print("compara y:", elemento.y, self.tabuleirodes[jogadai][jogadaj].y)
                             if ((elemento.x == self.tabuleirodes[jogadai][jogadaj].x)and(elemento.y == self.tabuleirodes[jogadai][jogadaj].y)):
                                 #jogada valida, prosseguir troca
-                                print("valida-prosseguir troca")
+                                #print("valida-prosseguir troca")
                                 temp = self.tabuleiro[jogadai][jogadaj]
                                 self.tabuleiro[jogadai][jogadaj] = self.tabuleiro[peca[0]][peca[1]]
                                 self.tabuleiro[peca[0]][peca[1]] = temp
@@ -985,20 +985,20 @@ class Jogo:
                                     self.continuapulo = 0
                                     self.comer(peca[0], peca[1], jogadai, jogadaj)
                                     self.pulo = 0
-                                    print(self.tabuleiro[jogadai][jogadaj])
+                                    #print(self.tabuleiro[jogadai][jogadaj])
                                     self.lista_obrigatorias = self.encadeamento(jogadai, jogadaj, self.tabuleiro[jogadai][jogadaj])
-                                    print(self.lista_obrigatorias)
+                                    #print(self.lista_obrigatorias)
                                     if(self.lista_obrigatorias != None):
                                         self.continuapulo = 1
                                         self.pulo = 1
-                                        print("continua pulo")
+                                        #print("continua pulo")
                                     else:
                                         self.turno = 0
-                                        print("virou turno")
+                                        #print("virou turno")
                                 else:
                                     self.turno = 0
-                                    print("virou turno")
-                                print("jogou")
+                                    #print("virou turno")
+                                #print("jogou")
                                 self.casa_selecionada = None
                                 self.lista_possibilidades = None
                             else:
